@@ -17,7 +17,7 @@ flutter pub add bumblebee
 
 ## Usage
 
-### Subscribe to a stream
+### Subscribing to a stream
 
 ```dart
 import 'package:bumblebee/bumblebee.dart' as bumblebee;
