@@ -1,3 +1,5 @@
+# Bumblebee
+
 Bumblebee is the Dart & Flutter client library for
 [Pollen](https://github.com/EverestHC-mySofie/pollen),
 an HTTP pubsub and streaming engine for Rails.
@@ -5,7 +7,7 @@ an HTTP pubsub and streaming engine for Rails.
 ## Features
 
 Subscribe to Pollen streams and be notified of message events,
-stream completion and failure.
+streams completion and failure.
 
 ## Getting started
 
