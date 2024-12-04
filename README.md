@@ -51,7 +51,7 @@ void subscribe(String streamId) async {
 
 ### Handle errors
 
-Connection timeouts and stream failures trigger server-side throw
+Connection timeouts and stream failures fired server-side throw
 `TimeoutException` and `FailureException` exceptions, respectively.
 As Bumblebee uses the http package under the hood, network connectivity
 issues will throw `http.ClientException` exceptions.
