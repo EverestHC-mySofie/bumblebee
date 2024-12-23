@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bumblebee/bumblebee.dart' as bumblebee;
 
 // Usage
@@ -15,11 +17,13 @@ void main(List<String> args) async {
       print('Payload: ${event.data()}');
     }).listen(args[1], (request) {
       request.headers['authorization'] = 'Bearer: <TOKEN>';
-    });
+    }).timeout(const Duration(seconds: 120));
     print('Stream completed with signal "${event?.type}"');
     print("Payload: ${event?.data()}");
   } on bumblebee.BumblebeeException catch (e) {
     print(e.message);
     rethrow;
+  } on TimeoutException catch (e) {
+    print("Client timeout ${e.message}");
   }
 }

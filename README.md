@@ -31,7 +31,7 @@ void subscribe(String streamId) async {
 
 ### Listening to stream updates
 
-To listen to updates, one has to use the `listen` method providing the stream ID.
+To start listening to updates, use the `listen` method and provide the stream ID.
 As the endpoint is protected by some authentication scheme, the closure passed
 as an argument to the `listen` method can be used to add appropriate parameters
 or headers to the HTTP request.
@@ -59,10 +59,32 @@ void subscribe(String streamId) async {
 }
 ```
 
+### Client timeout
+
+The server will automatically close the stream after the timeout specified on
+the server-side. You should also probably ensure a timeout is applied on the
+client side. To do so, use the `timeout` method:
+
+```dart
+import 'package:bumblebee/bumblebee.dart' as bumblebee;
+
+void subscribe(String streamId) async {
+  try {
+    bumblebee.Event? event = await bumblebee.Client(server: Uri.parse('https://pollen.server.local'))
+      .listen(streamId, (request) {
+        request.headers['authorization'] = "Bearer: <TOKEN>";
+      }).timeout(const Duration(seconds: 30));
+    print("Stream completed: ${event?.type}");
+    print('Payload: ${event?.data()}');
+  } on TimeoutException catch (e) {
+    print("Client timeout ${e.message}");
+  }
+}
+
 ### Handle errors
 
 Connection timeouts and stream failures fired server-side throw
-`TimeoutException` and `FailureException` exceptions, respectively.
+`StreamTimeoutException` and `FailureException` exceptions, respectively.
 As Bumblebee uses the http package under the hood, network connectivity
 issues will throw `http.ClientException` exceptions.
 
@@ -70,3 +92,4 @@ issues will throw `http.ClientException` exceptions.
 
 This library is available as open source under the terms of the
 [MIT License](https://opensource.org/licenses/MIT).
+```

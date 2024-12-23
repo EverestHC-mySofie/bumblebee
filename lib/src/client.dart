@@ -38,7 +38,7 @@ class Client {
         accumulator.nextLine(line);
       }).onDone(() {
         if (accumulator.completionEvent == null) {
-          completer.completeError(TimeoutException(
+          completer.completeError(StreamTimeoutException(
               "The remote server closed connection without a completion event"));
         } else if (accumulator.completionEvent!.type == 'failed') {
           completer.completeError(FailureException(accumulator.completionEvent!,
@@ -82,6 +82,6 @@ class FailureException extends BumblebeeException {
   FailureException(this.event, super.message);
 }
 
-class TimeoutException extends BumblebeeException {
-  TimeoutException(super.message);
+class StreamTimeoutException extends BumblebeeException {
+  StreamTimeoutException(super.message);
 }
