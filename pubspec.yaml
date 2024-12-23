@@ -1,6 +1,6 @@
 name: bumblebee
 description: A client for the Pollen pubsub / streaming server.
-version: 0.1.0
+version: 0.2.0
 repository: https://github.com/EverestHC-mySofie/bumblebee
 
 environment:
