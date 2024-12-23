@@ -6,3 +6,7 @@
 
 - Add a request handler to add parameters and headers to the HTTP requests.
 - Improve documentation to show support for client-side timeouts.
+
+## 0.2.1
+
+- Fix typo in README.
