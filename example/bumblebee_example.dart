@@ -13,7 +13,9 @@ void main(List<String> args) async {
     }).onMessage((bumblebee.Event event) {
       print('Received a message of type ${event.type}');
       print('Payload: ${event.data()}');
-    }).listen(args[1]);
+    }).listen(args[1], (request) {
+      request.headers['authorization'] = 'Bearer: <TOKEN>';
+    });
     print('Stream completed with signal "${event?.type}"');
     print("Payload: ${event?.data()}");
   } on bumblebee.BumblebeeException catch (e) {

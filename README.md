@@ -31,6 +31,14 @@ void subscribe(String streamId) async {
 
 ### Listening to stream updates
 
+To listen to updates, one has to use the `listen` method providing the stream ID.
+As the endpoint is protected by some authentication scheme, the closure passed
+as an argument to the `listen` method can be used to add appropriate parameters
+or headers to the HTTP request.
+
+The call to listen will return as soon as an event with the type `completed` or
+`failed` is pushed by the server.
+
 ```dart
 import 'package:bumblebee/bumblebee.dart' as bumblebee;
 
@@ -43,7 +51,9 @@ void subscribe(String streamId) async {
     }).onMessage((bumblebee.Event event) {
       print('Received an event of type ${event.type}');
       print('Payload: ${event.data()}');
-    }).listen(streamId);
+    }).listen(streamId, (request) {
+      request.headers['authorization'] = "Bearer: <TOKEN>";
+    });
   print("Stream completed: ${event?.type}");
   print('Payload: ${event?.data()}');
 }

@@ -28,11 +28,12 @@ class Client {
     return this;
   }
 
-  Future<Event?> listen(String streamId) async {
+  Future<Event?> listen(String streamId,
+      [Function(http.Request)? requestHandler]) async {
     Completer<Event?> completer = Completer();
     Accumulator accumulator = Accumulator(_bridge!);
 
-    _openStream(streamId).listen((data) {
+    _openStream(streamId, requestHandler).listen((data) {
       _lineStream(data).listen((line) {
         accumulator.nextLine(line);
       }).onDone(() {
@@ -50,10 +51,14 @@ class Client {
     return completer.future;
   }
 
-  Stream<http.StreamedResponse> _openStream(String streamId) {
+  Stream<http.StreamedResponse> _openStream(
+      String streamId, Function(http.Request)? requestHandler) {
     Uri streamUri = server.resolve("$channelPrefix/$streamId");
-    Future<http.StreamedResponse> response =
-        httpClient!.send(http.Request("GET", streamUri));
+    http.Request request = http.Request("GET", streamUri);
+    if (requestHandler != null) {
+      requestHandler(request);
+    }
+    Future<http.StreamedResponse> response = httpClient!.send(request);
     return response.asStream();
   }
 
