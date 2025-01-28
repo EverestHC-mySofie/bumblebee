@@ -28,7 +28,9 @@ class Accumulator {
   }
 
   _handleHeartbeat(dataLine) {
-    _bridge.onHeartbeat!();
+    if (_bridge.onHeartbeat != null) {
+      _bridge.onHeartbeat!();
+    }
   }
 
   _handleEvent(dataLine) {

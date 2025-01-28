@@ -32,15 +32,16 @@ void subscribe(String streamId) async {
 ### Listening to stream updates
 
 To start listening to updates, use the `listen` method and provide the stream ID.
-As the endpoint is protected by some authentication scheme, the closure passed
-as an argument to the `listen` method can be used to add appropriate parameters
-or headers to the HTTP request.
+As the endpoint should be protected by some authentication scheme, the closure passed
+as an argument to the `listen` method can be used to build a custom HTTP request
+based upon the provided URI.
 
 The call to listen will return as soon as an event with the type `completed` or
 `failed` is pushed by the server.
 
 ```dart
 import 'package:bumblebee/bumblebee.dart' as bumblebee;
+import 'package:http/http.dart' as http;
 
 void subscribe(String streamId) async {
   bumblebee.Event? event = await bumblebee.Client(server: Uri.parse('https://pollen.server.local'))
@@ -51,8 +52,10 @@ void subscribe(String streamId) async {
     }).onMessage((bumblebee.Event event) {
       print('Received an event of type ${event.type}');
       print('Payload: ${event.data()}');
-    }).listen(streamId, (request) {
-      request.headers['authorization'] = "Bearer: <TOKEN>";
+    }).listen(streamId, (uri) {
+      final request = http.Request('GET', uri);
+      request.headers['authorization'] = 'Bearer: <TOKEN>';
+      return request;
     });
   print("Stream completed: ${event?.type}");
   print('Payload: ${event?.data()}');
@@ -67,12 +70,15 @@ client side. To do so, use the `timeout` method:
 
 ```dart
 import 'package:bumblebee/bumblebee.dart' as bumblebee;
+import 'package:http/http.dart' as http;
 
 void subscribe(String streamId) async {
   try {
     bumblebee.Event? event = await bumblebee.Client(server: Uri.parse('https://pollen.server.local'))
-      .listen(streamId, (request) {
-        request.headers['authorization'] = "Bearer: <TOKEN>";
+      .listen(streamId, (uri) {
+        final request = http.Request('GET', uri);
+        request.headers['authorization'] = 'Bearer: <TOKEN>';
+        return request;
       }).timeout(const Duration(seconds: 30));
     print("Stream completed: ${event?.type}");
     print('Payload: ${event?.data()}');

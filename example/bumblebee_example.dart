@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:http/http.dart' as http;
 
 import 'package:bumblebee/bumblebee.dart' as bumblebee;
 
@@ -15,8 +16,10 @@ void main(List<String> args) async {
     }).onMessage((bumblebee.Event event) {
       print('Received a message of type ${event.type}');
       print('Payload: ${event.data()}');
-    }).listen(args[1], (request) {
+    }).listen(args[1], (uri) {
+      final request = http.Request('GET', uri);
       request.headers['authorization'] = 'Bearer: <TOKEN>';
+      return request;
     }).timeout(const Duration(seconds: 120));
     print('Stream completed with signal "${event?.type}"');
     print("Payload: ${event?.data()}");
