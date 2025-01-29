@@ -10,3 +10,7 @@
 ## 0.2.1
 
 - Fix typo in README.
+
+## 0.3.0
+
+- Expect an HTTP request as the return value of the configuration closure.
